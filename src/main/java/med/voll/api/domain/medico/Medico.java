@@ -2,7 +2,11 @@ package med.voll.api.domain.medico;
 
 import jakarta.persistence.*;
 import lombok.*;
+import med.voll.api.domain.consulta.Consulta;
 import med.voll.api.domain.endereco.Endereco;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Table(name = "medicos")
@@ -33,6 +37,9 @@ public class Medico {
     private Endereco endereco;
 
     private Boolean ativo;
+
+    @OneToMany(mappedBy = "medico", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Consulta> consultas = new ArrayList<>();
 
 
     public Medico(DadosCadastroMedico dados) {
