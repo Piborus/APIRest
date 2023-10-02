@@ -1,5 +1,6 @@
 package med.voll.api.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import med.voll.api.domain.usuario.DadosAutenticacao;
 import med.voll.api.domain.usuario.Usuario;
@@ -13,29 +14,25 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/login")
 public class AutenticationController {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private AuthenticationManager manager;
 
     @Autowired
     private TokenService tokenService;
 
     @PostMapping
-    public ResponseEntity efetuarlogin(@RequestBody @Valid DadosAutenticacao dados) {
-        try {
-            var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.password());
-            var authentication = authenticationManager.authenticate(authenticationToken);
+    public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
+        var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.password());
+        var authentication = manager.authenticate(authenticationToken);
 
-            var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
+        var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
 
-            return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
     }
 }

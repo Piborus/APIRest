@@ -1,18 +1,15 @@
 package med.voll.api.domain.medico;
 
 import jakarta.persistence.*;
-import lombok.*;
-import med.voll.api.domain.consulta.Consulta;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import med.voll.api.domain.endereco.Endereco;
-
-import java.util.ArrayList;
-import java.util.List;
-
 
 @Table(name = "medicos")
 @Entity(name = "Medico")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -21,12 +18,10 @@ public class Medico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nome;
+    private String email;
 
     private String telefone;
-
-    private String email;
 
     private String crm;
 
@@ -36,24 +31,20 @@ public class Medico {
     @Embedded
     private Endereco endereco;
 
+
     private Boolean ativo;
 
-    @OneToMany(mappedBy = "medico", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Consulta> consultas = new ArrayList<>();
-
-
     public Medico(DadosCadastroMedico dados) {
-        this.crm = dados.crm();
-        this.nome = dados.nome();
-        this.telefone = dados.telefone();
-        this.email = dados.email();
-        this.especialidade = dados.especialidade();
         this.ativo = true;
+        this.nome = dados.nome();
+        this.email = dados.email();
+        this.telefone = dados.telefone();
+        this.crm = dados.crm();
+        this.especialidade = dados.especialidade();
         this.endereco = new Endereco(dados.endereco());
-
     }
 
-    public void atualizarInformacao(DadosAtualizacaoMedico dados) {
+    public void atualizarInformacoes(DadosAtualizacaoMedico dados) {
         if (dados.nome() != null) {
             this.nome = dados.nome();
         }
@@ -61,9 +52,8 @@ public class Medico {
             this.telefone = dados.telefone();
         }
         if (dados.endereco() != null) {
-            this.endereco.atualizarInformacao(dados.endereco());
+            this.endereco.atualizarInformacoes(dados.endereco());
         }
-
 
     }
 
