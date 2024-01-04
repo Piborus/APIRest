@@ -1,8 +1,7 @@
 package br.com.alura.screenmatch;
 
-import br.com.alura.screenmatch.model.DadosSerie;
-import br.com.alura.screenmatch.service.ConsumoAPI;
-import br.com.alura.screenmatch.service.ConverteDados;
+import br.com.alura.screenmatch.principal.Principal;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,19 +9,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ScreenmatchApplication implements CommandLineRunner {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ScreenmatchApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ScreenmatchApplication.class, args);
+    }
 
-	@Override
-	public void run(String... args) throws Exception {
-		var consumoAPI = new ConsumoAPI();
-		var json = consumoAPI.obterDados("http://www.omdbapi.com/?t=supernatural&apikey=7eeb4820");
-		System.out.println(json);
+    @Override
+    public void run(String... args) throws Exception {
+        Principal principal = new Principal();
+        principal.exibirMenu();
+
 //		var json1 = consumoAPI.obterDados("https://api.waifu.pics/sfw/waifu");
 //		System.out.println(json1);
-		ConverteDados conversor = new ConverteDados();
-		DadosSerie dados = conversor.obterDados(json, DadosSerie.class);
-		System.out.println(dados);
-	}
+
+
+    }
 }
